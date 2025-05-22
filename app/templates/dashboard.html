@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>InventaTrack Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <h2>📈 Monthly Sales Revenue</h2>
+  <canvas id="salesChart"></canvas>
+
+  <script>
+    const labels = {{ months | tojson }};
+    const data = {{ revenue | tojson }};
+
+    new Chart(document.getElementById('salesChart'), {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Revenue',
+                data: data,
+                backgroundColor: 'rgba(75, 192, 192, 0.5)'
+            }]
+        }
+    });
+  </script>
+  <h2>⚠️ Low Stock Alerts</h2>
+<table border="1" cellpadding="10">
+  <thead>
+    <tr>
+      <th>Product</th>
+      <th>Warehouse</th>
+      <th>Current Stock</th>
+      <th>Reorder Level</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in low_stock %}
+    <tr>
+      <td>{{ item.product_name }}</td>
+      <td>{{ item.warehouse_name }}</td>
+      <td>{{ item.current_stock }}</td>
+      <td>{{ item.reorder_level }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<h2>📦 Reorder Suggestions</h2>
+<table border="1" cellpadding="10">
+  <thead>
+    <tr>
+      <th>Product</th>
+      <th>Warehouse</th>
+      <th>Current Stock</th>
+      <th>Reorder Level</th>
+      <th>Suggested Quantity</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in low_stock %}
+    <tr>
+      <td>{{ item.product_name }}</td>
+      <td>{{ item.warehouse_name }}</td>
+      <td>{{ item.current_stock }}</td>
+      <td>{{ item.reorder_level }}</td>
+      <td>{{ item.reorder_quantity }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<h2>🌍 Regional Sales Revenue</h2>
+<canvas id="regionChart"></canvas>
+
+<script>
+  const ctx2 = document.getElementById('regionChart');
+  new Chart(ctx2, {
+    type: 'bar',
+    data: {
+      labels: {{ region_labels | tojson }},
+      datasets: [{
+        label: 'Sales Revenue by Region',
+        data: {{ region_revenue | tojson }},
+        backgroundColor: 'rgba(153, 102, 255, 0.6)'
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>
+
+</body>
+</html>
